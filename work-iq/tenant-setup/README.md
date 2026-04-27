@@ -1,4 +1,4 @@
-# Tenant Setup — M365 Admin
+# Tenant Setup: M365 Admin
 
 Steps performed by the **tenant administrator** (Global Admin, Cloud Application Admin or Application Admin) to enable Work IQ in Microsoft 365.
 
@@ -46,7 +46,7 @@ Frontier requires three simultaneous conditions: Copilot license, organization o
 3. Look for **"Microsoft 365 Insider"** / **"Frontier"**.
 4. Enable it for the desired users or groups.
 
-![M365 Admin Center — enabling Copilot Frontier under Copilot Settings](../images/admin-center-frontier-activation.png)
+![M365 Admin Center, enabling Copilot Frontier under Copilot Settings](../images/admin-center-frontier-activation.png)
 
 > 💡 Without Frontier, Work IQ MCP Servers **do not show up** in the Copilot Studio or Azure AI Foundry catalog.
 
@@ -56,41 +56,48 @@ More details: [Microsoft Frontier Program](https://www.microsoft.com/microsoft-3
 
 ## 3. Provision Service Principals + Admin Consent
 
-### Option A — PowerShell script (recommended)
+### Option A: Provision via Microsoft Graph PowerShell
 
 ```powershell
 # Prerequisite: PowerShell 7+ and the Microsoft.Graph module
 Install-Module Microsoft.Graph -Scope CurrentUser
+Connect-MgGraph -Scopes "Application.ReadWrite.All","AppRoleAssignment.ReadWrite.All"
 
-cd tenant-setup
-.\Enable-WorkIQToolsForTenant.ps1
+# Provision the Work IQ service principals in your tenant by AppId
+$workIqAppIds = @(
+  "e1ef8955-6b2c-4f30-9e71-8ede31ae55ee" # Work IQ Tools (root)
+  # Add the additional Work IQ AppIds documented by Microsoft as needed.
+)
+foreach ($appId in $workIqAppIds) {
+  New-MgServicePrincipal -AppId $appId
+}
 ```
 
-![PowerShell terminal cloning work-iq and running Enable-WorkIQToolsForTenant.ps1](../images/enable-script-clone-and-run.png)
+![PowerShell terminal cloning work-iq and running the enable workflow](../images/enable-script-clone-and-run.png)
 
-The script automatically provisions the Service Principals: **Work IQ Tools, Mail, Calendar, Teams, OneDrive, SharePoint, Word, Admin, Me and M365 Copilot**, and grants admin consent for the required permissions.
+This provisions the Service Principals (**Work IQ Tools, Mail, Calendar, Teams, OneDrive, SharePoint, Word, Admin, Me and M365 Copilot**) so admin consent can be granted for the required permissions.
 
-![Script output: provisioning of MCP server service principals and admin consent for permissions](../images/enable-script-provisioning-output.png)
+![Provisioning of MCP server service principals and admin consent for permissions](../images/enable-script-provisioning-output.png)
 
-### Option B — Quick-consent URL (1 click)
+### Option B: Quick-consent URL (1 click)
 
 ```
 https://login.microsoftonline.com/YOUR_TENANT_ID/adminconsent?client_id=e1ef8955-6b2c-4f30-9e71-8ede31ae55ee
 ```
 
-> ⚠️ If it returns `AADSTS650052`, the Service Principal has not been provisioned yet — use **Option A**.
+> ⚠️ If it returns `AADSTS650052`, the Service Principal has not been provisioned yet, use **Option A**.
 
 ---
 
 ## 4. Verify the configuration
 
-Read-only script — safe to run in production:
+In `admin.microsoft.com → Agents and Tools` you should see every Work IQ Service Principal with status ✅. You can also list them via Microsoft Graph PowerShell:
 
 ```powershell
-.\Verify-WorkIQSetup.ps1
+Get-MgServicePrincipal -Filter "startswith(displayName,'Work IQ')" | Select-Object DisplayName, AppId
 ```
 
-Expected output: ✅ for every Work IQ Service Principal.
+Expected output: one entry per Work IQ Service Principal.
 
 ---
 
@@ -100,18 +107,9 @@ Expected output: ✅ for every Work IQ Service Principal.
 2. View all active MCP Servers.
 3. Use **Allow** / **Block** by organizational policy.
 
-![M365 Admin Center — Agents → Tools → MCP Servers listing the 12 Work IQ servers available](../images/admin-center-mcp-servers.png)
+![M365 Admin Center, Agents → Tools → MCP Servers listing the 12 Work IQ servers available](../images/admin-center-mcp-servers.png)
 
 To audit MCP calls in real time, use **Microsoft Defender → Advanced Hunting**.
-
----
-
-## Files in this directory
-
-| File | Description |
-| --- | --- |
-| [Enable-WorkIQToolsForTenant.ps1](./Enable-WorkIQToolsForTenant.ps1) | Provisions Service Principals and grants admin consent. |
-| [Verify-WorkIQSetup.ps1](./Verify-WorkIQSetup.ps1) | Read-only tenant diagnostics. |
 
 ---
 

@@ -36,7 +36,7 @@ workiq ask -q "List the sites my user has access to"
 
 ![CLI running workiq ask about SharePoint sites accessible to the user](../images/cli-ask-list-sharepoint-sites.png)
 
-> 💡 Notice the response above: Work IQ **is not Microsoft Graph**. It lists sites based on **objective evidence of access** (files/pages you created, edited or viewed) — not on the exhaustive list of tenant permissions. This is by design of the intelligence layer.
+> 💡 Notice the response above: Work IQ **is not Microsoft Graph**. It lists sites based on **objective evidence of access** (files/pages you created, edited or viewed), not on the exhaustive list of tenant permissions. This is by design of the intelligence layer.
 
 ## 👥 People and organization
 
@@ -110,9 +110,9 @@ Contoso? Summarize the current relationship status.
 | `-q` | `--question` | `<question>` | Natural-language question. |
 | `-f` | `--file-urls` | `<file-urls>` | URLs of OneDrive/SharePoint files to force as root context. |
 | `-t` | `--tenant` | `<tenant-id>` | Specific tenant (when you belong to more than one). |
-| `-v` | `--verbose` | — | Verbose logs (`request-id`, `conversation ID`). |
-| `-d` | `--developer` | — | Developer mode (raw JSON payloads). |
-| `-?, -h` | `--help` | — | Help menu. |
+| `-v` | `--verbose` |, | Verbose logs (`request-id`, `conversation ID`). |
+| `-d` | `--developer` |, | Developer mode (raw JSON payloads). |
+| `-?, -h` | `--help` |, | Help menu. |
 
 ---
 
@@ -123,4 +123,4 @@ Contoso? Summarize the current relationship status.
 | `AADSTS650052` | Service Principal not provisioned | Run [`Enable-WorkIQToolsForTenant.ps1`](../tenant-setup/Enable-WorkIQToolsForTenant.ps1) |
 | `Access Denied` | No Copilot license or no consent | Check the license at `admin.microsoft.com` and re-run admin consent |
 | MCP not showing in Copilot Studio | Frontier not enabled | Enable via Admin Center → Services → Microsoft 365 Insider |
-| Cursor "blinking" after `workiq mcp` | Expected — server waiting for a client | Not an error; configure it in the agent file (see [../vscode-mcp/](../vscode-mcp/)) |
+| Cursor "blinking" after `workiq mcp` | Expected, server waiting for a client | Not an error; configure it in the agent file (see [../vscode-mcp/](../vscode-mcp/)) |

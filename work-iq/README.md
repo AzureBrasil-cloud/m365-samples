@@ -1,10 +1,17 @@
-# 🧠 Work IQ — Consolidated reference
+# 🧠 Work IQ: Consolidated reference
 
-> Community guide to put **Microsoft Work IQ** to work in a Microsoft 365 tenant — **read-only**.
+> Community guide to put **Microsoft Work IQ** to work in a Microsoft 365 tenant in **read-only** mode.
 >
-> Content consolidated from the [CarlosErutan/Work-IQ](https://github.com/CarlosErutan/Work-IQ) repository and the official [microsoft/work-iq](https://github.com/microsoft/work-iq) documentation.
+> Content consolidated by [AzureBrasil.Cloud](https://github.com/AzureBrasil-cloud) based on the official [microsoft/work-iq](https://github.com/microsoft/work-iq) documentation.
 
-**Microsoft Work IQ** is the intelligence layer that connects AI assistants to Microsoft 365 Copilot data — emails, meetings, documents, Teams messages and organizational insights — through the **Model Context Protocol (MCP)**.
+**Microsoft Work IQ** is the intelligence layer that connects AI assistants to Microsoft 365 Copilot data (emails, meetings, documents, Teams messages and organizational insights) through the **Model Context Protocol (MCP)**.
+
+You can consume Work IQ from four surfaces:
+
+- **Work IQ CLI** in any terminal.
+- **VS Code** via MCP in GitHub Copilot Chat.
+- **GitHub Copilot CLI** as a plugin.
+- **Microsoft Copilot service** (Copilot Studio, Azure AI Foundry and any other MCP client).
 
 > 🔒 **Scope of this directory:** read-only usage of Work IQ (CLI + MCP) only. Write operations are not part of the native product and are **out of scope**.
 
@@ -24,14 +31,10 @@ work-iq/
 │   └── examples.md                     ← read-only prompt catalog
 │
 ├── tenant-setup/                       ← M365 admin prepares the tenant
-│   ├── README.md                       ← admin consent step-by-step
-│   ├── Enable-WorkIQToolsForTenant.ps1 ← provisions Service Principals
-│   └── Verify-WorkIQSetup.ps1          ← read-only diagnostics
+│   └── README.md                       ← admin consent step-by-step
 │
 ├── cli/                                ← Work IQ CLI (terminal)
-│   ├── README.md                       ← installation + CLI usage
-│   ├── setup-workiq-cli.sh             ← bootstrap macOS/Linux
-│   └── setup-workiq-cli.ps1            ← bootstrap Windows
+│   └── README.md                       ← installation + CLI usage
 │
 └── vscode-mcp/                         ← Work IQ MCP in VS Code (and other MCP clients)
     ├── README.md                       ← config + usage in Copilot Chat
@@ -59,12 +62,11 @@ images/                                 ← screenshots used across the docs
 ```
 1. M365 Admin                           tenant-setup/
    └─ Enables Frontier
-   └─ Runs Enable-WorkIQToolsForTenant.ps1 (admin consent)
-   └─ Verifies with Verify-WorkIQSetup.ps1
+   └─ Grants admin consent for the Work IQ MCP servers
                 │
                 ▼
 2. User/Dev                             cli/
-   └─ Installs @microsoft/workiq (script or npm/npx)
+   └─ Installs @microsoft/workiq via npm/npx
    └─ workiq accept-eula
    └─ workiq ask -q "What meetings do I have today?"
                 │
@@ -92,10 +94,10 @@ Full details in [docs/overview.md](./docs/overview.md#prerequisites).
 ## Official references
 
 - [Microsoft Work IQ CLI (preview)](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/workiq-overview)
-- [Work IQ MCP Overview — Microsoft Agent 365](https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview)
+- [Work IQ MCP Overview, Microsoft Agent 365](https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview)
 - [Work IQ in Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/use-work-iq)
 - [microsoft/work-iq (official repo)](https://github.com/microsoft/work-iq)
-- [Model Context Protocol — Official spec](https://modelcontextprotocol.io/)
+- [Model Context Protocol, Official spec](https://modelcontextprotocol.io/)
 
 ---
 
