@@ -1,122 +1,122 @@
-# Tenant Setup — Admin M365
+# Tenant Setup — M365 Admin
 
-Passos executados pelo **Administrador do tenant** (Global Admin, Cloud Application Admin ou Application Admin) para habilitar o Work IQ no Microsoft 365.
+Steps performed by the **tenant administrator** (Global Admin, Cloud Application Admin or Application Admin) to enable Work IQ in Microsoft 365.
 
-> 📖 Antes de começar, leia [`docs/overview.md`](../docs/overview.md) para entender pré-requisitos e o modelo de permissões.
+> 📖 Before starting, read [`docs/overview.md`](../docs/overview.md) to understand the prerequisites and the permission model.
 
 ---
 
-## Visão geral do fluxo
+## Flow at a glance
 
 ```
-1. Verificar licenças Copilot add-on
+1. Verify Copilot add-on licenses
         │
         ▼
-2. Habilitar Programa Frontier
+2. Enable the Frontier Program
         │
         ▼
-3. Provisionar Service Principals + Admin Consent
-   (script PowerShell)
+3. Provision Service Principals + Admin Consent
+   (PowerShell script)
         │
         ▼
-4. Verificar configuração
+4. Verify the configuration
         │
         ▼
-5. Gerenciar MCP Servers no Admin Center
+5. Manage MCP Servers in the Admin Center
 ```
 
 ---
 
-## 1. Verificar licenças
+## 1. Verify licenses
 
-Acesse `admin.microsoft.com → Faturamento → Licenças` e confirme que os usuários têm a licença **Microsoft 365 Copilot add-on** atribuída.
+Go to `admin.microsoft.com → Billing → Licenses` and confirm that users have the **Microsoft 365 Copilot add-on** license assigned.
 
-> ⏱️ Após atribuir, aguarde até **24h** para propagação completa.
-
----
-
-## 2. Habilitar o Programa Frontier
-
-O Frontier exige três condições simultâneas: licença Copilot, inscrição da organização e liberação pelo admin.
-
-![Pré-requisitos do Frontier: Licença Copilot, Inscrição da organização e Acesso gerenciado pelo administrador](../images/frontier-requirements.png)
-
-1. Acesse [admin.microsoft.com](https://admin.microsoft.com).
-2. Navegue até **Configurações → Configurações da Organização → Serviços**.
-3. Procure por **"Microsoft 365 Insider"** / **"Frontier"**.
-4. Ative para os usuários ou grupos desejados.
-
-![Admin Center M365 — ativando Copilot Frontier em Configurações do Copilot](../images/admin-center-frontier-activation.png)
-
-> 💡 Sem o Frontier, os MCP Servers do Work IQ **não aparecem** no catálogo do Copilot Studio nem no Azure AI Foundry.
-
-Mais detalhes: [Microsoft Frontier Program](https://www.microsoft.com/pt-br/microsoft-365-copilot/frontier-program).
+> ⏱️ After assignment, allow up to **24h** for full propagation.
 
 ---
 
-## 3. Provisionar Service Principals + Admin Consent
+## 2. Enable the Frontier Program
 
-### Opção A — Script PowerShell (recomendado)
+Frontier requires three simultaneous conditions: Copilot license, organization opt-in, and admin enablement.
+
+![Frontier prerequisites: Copilot license, Organization enrollment and Admin-managed access](../images/frontier-requirements.png)
+
+1. Go to [admin.microsoft.com](https://admin.microsoft.com).
+2. Navigate to **Settings → Org Settings → Services**.
+3. Look for **"Microsoft 365 Insider"** / **"Frontier"**.
+4. Enable it for the desired users or groups.
+
+![M365 Admin Center — enabling Copilot Frontier under Copilot Settings](../images/admin-center-frontier-activation.png)
+
+> 💡 Without Frontier, Work IQ MCP Servers **do not show up** in the Copilot Studio or Azure AI Foundry catalog.
+
+More details: [Microsoft Frontier Program](https://www.microsoft.com/microsoft-365-copilot/frontier-program).
+
+---
+
+## 3. Provision Service Principals + Admin Consent
+
+### Option A — PowerShell script (recommended)
 
 ```powershell
-# Pré-requisito: PowerShell 7+ e módulo Microsoft.Graph
+# Prerequisite: PowerShell 7+ and the Microsoft.Graph module
 Install-Module Microsoft.Graph -Scope CurrentUser
 
 cd tenant-setup
 .\Enable-WorkIQToolsForTenant.ps1
 ```
 
-![Terminal PowerShell rodando git clone do work-iq e executando Enable-WorkIQToolsForTenant.ps1](../images/enable-script-clone-and-run.png)
+![PowerShell terminal cloning work-iq and running Enable-WorkIQToolsForTenant.ps1](../images/enable-script-clone-and-run.png)
 
-O script provisiona automaticamente os Service Principals: **Work IQ Tools, Mail, Calendar, Teams, OneDrive, SharePoint, Word, Admin, Me e M365 Copilot** e concede admin consent para as permissões necessárias.
+The script automatically provisions the Service Principals: **Work IQ Tools, Mail, Calendar, Teams, OneDrive, SharePoint, Word, Admin, Me and M365 Copilot**, and grants admin consent for the required permissions.
 
-![Saída do script: provisionamento dos service principals dos MCP servers e admin consent das permissões](../images/enable-script-provisioning-output.png)
+![Script output: provisioning of MCP server service principals and admin consent for permissions](../images/enable-script-provisioning-output.png)
 
-### Opção B — URL de consentimento rápido (1 clique)
+### Option B — Quick-consent URL (1 click)
 
 ```
-https://login.microsoftonline.com/SEU_TENANT_ID/adminconsent?client_id=e1ef8955-6b2c-4f30-9e71-8ede31ae55ee
+https://login.microsoftonline.com/YOUR_TENANT_ID/adminconsent?client_id=e1ef8955-6b2c-4f30-9e71-8ede31ae55ee
 ```
 
-> ⚠️ Se retornar `AADSTS650052`, o Service Principal ainda não foi provisionado — use a **Opção A**.
+> ⚠️ If it returns `AADSTS650052`, the Service Principal has not been provisioned yet — use **Option A**.
 
 ---
 
-## 4. Verificar configuração
+## 4. Verify the configuration
 
-Script somente leitura — seguro de rodar em produção:
+Read-only script — safe to run in production:
 
 ```powershell
 .\Verify-WorkIQSetup.ps1
 ```
 
-Saída esperada: ✅ para cada Service Principal do Work IQ.
+Expected output: ✅ for every Work IQ Service Principal.
 
 ---
 
-## 5. Gerenciar MCP Servers no Admin Center
+## 5. Manage MCP Servers in the Admin Center
 
-1. Acesse `admin.microsoft.com → Agentes e Ferramentas`.
-2. Visualize todos os MCP Servers ativos.
-3. Use **Permitir** / **Bloquear** por política organizacional.
+1. Go to `admin.microsoft.com → Agents and Tools`.
+2. View all active MCP Servers.
+3. Use **Allow** / **Block** by organizational policy.
 
-![Admin Center M365 — Agentes → Ferramentas → Servidores MCP listando os 12 servidores Work IQ disponíveis](../images/admin-center-mcp-servers.png)
+![M365 Admin Center — Agents → Tools → MCP Servers listing the 12 Work IQ servers available](../images/admin-center-mcp-servers.png)
 
-Para auditar chamadas MCP em tempo real, use **Microsoft Defender → Advanced Hunting**.
+To audit MCP calls in real time, use **Microsoft Defender → Advanced Hunting**.
 
 ---
 
-## Arquivos deste diretório
+## Files in this directory
 
-| Arquivo | Descrição |
+| File | Description |
 | --- | --- |
-| [Enable-WorkIQToolsForTenant.ps1](./Enable-WorkIQToolsForTenant.ps1) | Provisiona Service Principals e concede admin consent. |
-| [Verify-WorkIQSetup.ps1](./Verify-WorkIQSetup.ps1) | Diagnóstico somente leitura do tenant. |
+| [Enable-WorkIQToolsForTenant.ps1](./Enable-WorkIQToolsForTenant.ps1) | Provisions Service Principals and grants admin consent. |
+| [Verify-WorkIQSetup.ps1](./Verify-WorkIQSetup.ps1) | Read-only tenant diagnostics. |
 
 ---
 
-## Próximos passos
+## Next steps
 
-- Admin pronto → entregue o tenant configurado para os devs/usuários.
-- Usuário/Dev → [`../cli/`](../cli/) para instalar o Work IQ CLI.
-- Editor → [`../vscode-mcp/`](../vscode-mcp/) para configurar no VS Code.
+- Admin done → hand the configured tenant over to devs/users.
+- User/Dev → [`../cli/`](../cli/) to install the Work IQ CLI.
+- Editor → [`../vscode-mcp/`](../vscode-mcp/) to configure it in VS Code.

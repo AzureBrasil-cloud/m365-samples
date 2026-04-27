@@ -1,6 +1,6 @@
-# Documentação conceitual
+# Conceptual documentation
 
-| Documento | Descrição |
+| Document | Description |
 | --- | --- |
-| [overview.md](./overview.md) | O que é o Work IQ, arquitetura, modos de execução (`ask` vs `mcp`), segurança, governança e pré-requisitos. |
-| [examples.md](./examples.md) | Catálogo de prompts read-only para CLI e MCP — calendário, e-mails, documentos, pessoas, Teams e cenários compostos. |
+| [overview.md](./overview.md) | What Work IQ is, architecture, execution modes (`ask` vs `mcp`), security, governance and prerequisites. |
+| [examples.md](./examples.md) | Read-only prompt catalog for CLI and MCP — calendar, emails, documents, people, Teams and composite scenarios. |

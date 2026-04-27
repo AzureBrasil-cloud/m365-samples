@@ -1,24 +1,24 @@
-# Work IQ MCP no VS Code (read-only)
+# Work IQ MCP in VS Code (read-only)
 
-Configure o **GitHub Copilot Chat** do VS Code (ou qualquer outro cliente MCP) para consumir o **Work IQ MCP Server**. A IA passa a ter acesso somente leitura aos seus e-mails, calendário, documentos, Teams e organização — sem nunca alterar nada.
-
----
-
-## Pré-requisitos
-
-- **VS Code** atualizado com a extensão **GitHub Copilot Chat**.
-- **Node.js ≥ 18** instalado (para `npx`).
-- Tenant configurado pelo admin → [`../tenant-setup/`](../tenant-setup/).
-- Licença **Microsoft 365 Copilot add-on** ativa.
-- (Opcional) `workiq accept-eula` rodado uma vez — ver [`../cli/`](../cli/).
-
-> Você **não precisa** instalar `@microsoft/workiq` globalmente. O snippet abaixo usa `npx`, que baixa o pacote sob demanda.
+Configure VS Code's **GitHub Copilot Chat** (or any other MCP client) to consume the **Work IQ MCP Server**. The AI gains read-only access to your emails, calendar, documents, Teams and organization — without ever changing anything.
 
 ---
 
-## O snippet
+## Prerequisites
 
-O arquivo [`mcp-config.json`](./mcp-config.json) é o snippet **único e portável** que serve tanto para o VS Code quanto para qualquer outro cliente MCP (Claude Desktop, Azure AI Foundry, Copilot Studio em config avançada, agentes customizados):
+- Up-to-date **VS Code** with the **GitHub Copilot Chat** extension.
+- **Node.js ≥ 18** installed (for `npx`).
+- Tenant configured by the admin → [`../tenant-setup/`](../tenant-setup/).
+- Active **Microsoft 365 Copilot add-on** license.
+- (Optional) `workiq accept-eula` run once — see [`../cli/`](../cli/).
+
+> You **do not need** to install `@microsoft/workiq` globally. The snippet below uses `npx`, which fetches the package on demand.
+
+---
+
+## The snippet
+
+The file [`mcp-config.json`](./mcp-config.json) is the **single, portable** snippet that works for VS Code as well as for any other MCP client (Claude Desktop, Azure AI Foundry, Copilot Studio in advanced config, custom agents):
 
 ```json
 {
@@ -34,77 +34,77 @@ O arquivo [`mcp-config.json`](./mcp-config.json) é o snippet **único e portáv
 
 ---
 
-## Configuração no VS Code
+## VS Code configuration
 
-O VS Code lê configurações MCP de um arquivo `mcp.json`. Há duas opções:
+VS Code reads MCP configuration from an `mcp.json` file. There are two options:
 
-### Opção A — Workspace (recomendado)
+### Option A — Workspace (recommended)
 
-Crie `.vscode/mcp.json` na raiz do seu projeto e cole o conteúdo de [`mcp-config.json`](./mcp-config.json).
+Create `.vscode/mcp.json` at the root of your project and paste the contents of [`mcp-config.json`](./mcp-config.json).
 
-### Opção B — User-wide
+### Option B — User-wide
 
-`Cmd/Ctrl + Shift + P` → **MCP: Open User Configuration** → cole o conteúdo de [`mcp-config.json`](./mcp-config.json).
+`Cmd/Ctrl + Shift + P` → **MCP: Open User Configuration** → paste the contents of [`mcp-config.json`](./mcp-config.json).
 
-### Ativar no Copilot Chat
+### Activate it in Copilot Chat
 
-1. Reinicie o VS Code.
-2. No painel do Copilot Chat → ícone 🔧 **Ferramentas** → marque **`workiq`**.
-3. A primeira chamada vai pedir consentimento de login Microsoft 365.
+1. Restart VS Code.
+2. In the Copilot Chat panel → 🔧 **Tools** icon → toggle **`workiq`** on.
+3. The first call will request a Microsoft 365 sign-in consent.
 
 ---
 
-## Outros clientes MCP
+## Other MCP clients
 
-O mesmo arquivo [`mcp-config.json`](./mcp-config.json) funciona em qualquer cliente que leia o formato MCP padrão. Exemplos:
+The same [`mcp-config.json`](./mcp-config.json) works in any client that reads the standard MCP format. Examples:
 
-| Cliente | Onde colar |
+| Client | Where to paste |
 | --- | --- |
 | **Claude Desktop** | `claude_desktop_config.json` |
-| **Azure AI Foundry** | Configuração de agente → Tools → MCP |
-| **Copilot Studio** | Tools → Add MCP server (config avançada) |
-| **Agente customizado** | O arquivo que seu cliente MCP convencionar |
+| **Azure AI Foundry** | Agent configuration → Tools → MCP |
+| **Copilot Studio** | Tools → Add MCP server (advanced config) |
+| **Custom agent** | Whatever file your MCP client expects |
 
 ---
 
-## Como usar
+## How to use
 
-Com o `workiq` ativo, basta perguntar em linguagem natural no Copilot Chat:
-
-```
-Quais são minhas reuniões de hoje?
-Resuma os e-mails não lidos por prioridade.
-Quais documentos do SharePoint estão relacionados ao cliente Contoso?
-Quem é meu gestor?
-Liste decisões tomadas nas últimas reuniões com o time de Engenharia.
-```
-
-### Cenário típico — contexto para código
+With `workiq` enabled, just ask in natural language in Copilot Chat:
 
 ```
-Antes de eu implementar a feature de checkout:
-1. Busque no Work IQ todas as reuniões, e-mails e specs sobre "checkout v2".
-2. Resuma os requisitos discutidos.
-3. Liste quem deve ser adicionado como reviewer no PR.
+What meetings do I have today?
+Summarize unread emails by priority.
+Which SharePoint documents are related to customer Contoso?
+Who is my manager?
+List decisions made in recent meetings with the Engineering team.
 ```
 
-Mais exemplos: [`../docs/examples.md`](../docs/examples.md).
+### Typical scenario — context for code
+
+```
+Before I implement the checkout feature:
+1. Search Work IQ for all meetings, emails and specs about "checkout v2".
+2. Summarize the requirements that were discussed.
+3. List who should be added as a reviewer on the PR.
+```
+
+More examples: [`../docs/examples.md`](../docs/examples.md).
 
 ---
 
 ## Troubleshooting
 
-| Sintoma | Causa provável | Ação |
+| Symptom | Likely cause | Action |
 | --- | --- | --- |
-| `workiq` não aparece nas Ferramentas | `mcp.json` não foi salvo / VS Code não reiniciado | Salve o arquivo e reinicie o VS Code. |
-| `Access Denied` na primeira chamada | Sem licença Copilot ou consent não feito | Veja [`../tenant-setup/`](../tenant-setup/). |
-| `command not found: npx` | Node.js não instalado | Instale Node.js ≥ 18. |
-| Respostas vazias ou "não tenho acesso" | O usuário logado realmente não tem permissão Graph para o recurso | Esperado — Work IQ herda permissões delegadas. |
+| `workiq` does not show under Tools | `mcp.json` not saved / VS Code not restarted | Save the file and restart VS Code. |
+| `Access Denied` on the first call | No Copilot license or consent not granted | See [`../tenant-setup/`](../tenant-setup/). |
+| `command not found: npx` | Node.js not installed | Install Node.js ≥ 18. |
+| Empty answers or "I don't have access" | The signed-in user really lacks Graph permission for the resource | Expected — Work IQ inherits delegated permissions. |
 
 ---
 
-## Arquivos deste diretório
+## Files in this directory
 
-| Arquivo | Descrição |
+| File | Description |
 | --- | --- |
-| [mcp-config.json](./mcp-config.json) | Snippet MCP único — funciona no VS Code (`.vscode/mcp.json`) e em qualquer outro cliente MCP. |
+| [mcp-config.json](./mcp-config.json) | Single MCP snippet — works in VS Code (`.vscode/mcp.json`) and in any other MCP client. |

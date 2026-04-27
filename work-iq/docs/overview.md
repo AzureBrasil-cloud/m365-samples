@@ -1,70 +1,70 @@
-# O que é o Work IQ
+# What is Work IQ
 
-> Visão conceitual em pt-BR baseada na [documentação oficial da Microsoft](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/workiq-overview) e no repositório [microsoft/work-iq](https://github.com/microsoft/work-iq).
+> Conceptual overview based on the [official Microsoft documentation](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/workiq-overview) and the [microsoft/work-iq](https://github.com/microsoft/work-iq) repository.
 
-O **Microsoft Work IQ** é a camada de inteligência que conecta assistentes de IA aos dados do Microsoft 365 Copilot. Ele expõe **e-mails, reuniões, documentos, mensagens do Teams e insights organizacionais** via **Model Context Protocol (MCP)** — o mesmo protocolo aberto usado por Claude, VS Code, GitHub Copilot e outros clientes de IA.
+**Microsoft Work IQ** is the intelligence layer that connects AI assistants to Microsoft 365 Copilot data. It exposes **emails, meetings, documents, Teams messages and organizational insights** through the **Model Context Protocol (MCP)** — the same open protocol used by Claude, VS Code, GitHub Copilot and other AI clients.
 
-> ⚠️ **Public Preview.** Funcionalidades e APIs podem mudar. Requer licença **Microsoft 365 Copilot add-on** e o **Programa Frontier** habilitado no tenant.
+> ⚠️ **Public Preview.** Features and APIs may change. Requires the **Microsoft 365 Copilot add-on** license and the **Frontier Program** enabled on the tenant.
 
-> 🔒 **Somente leitura.** Este diretório cobre exclusivamente o uso **read-only** do Work IQ (consultas via CLI e MCP). Operações de escrita não fazem parte do produto nativo e estão fora do escopo aqui.
+> 🔒 **Read-only.** This directory covers exclusively the **read-only** usage of Work IQ (queries via CLI and MCP). Write operations are not part of the native product and are out of scope here.
 
 ---
 
-## Arquitetura em três camadas
+## Three-layer architecture
 
-| Camada | O que faz |
+| Layer | What it does |
 | --- | --- |
-| **Data** | Indexação semântica de e-mails, documentos, chats e arquivos (SharePoint, OneDrive, Outlook, Teams). |
-| **Memory** | Contexto persistente — prioridades, padrões de colaboração, histórico de trabalho. |
-| **Inference** | Modelos de linguagem + ferramentas MCP + agentes — raciocínio sobre os dados. |
+| **Data** | Semantic indexing of emails, documents, chats and files (SharePoint, OneDrive, Outlook, Teams). |
+| **Memory** | Persistent context — priorities, collaboration patterns, work history. |
+| **Inference** | Language models + MCP tools + agents — reasoning over the data. |
 
-Tudo é **recuperado sob demanda**: o Work IQ não armazena dados do M365.
+Everything is **fetched on demand**: Work IQ does not store M365 data.
 
 ---
 
-## Como o Work IQ se encaixa
+## How Work IQ fits in
 
 ```
-Você (VS Code, Copilot CLI, Copilot Studio, Claude, Foundry…)
+You (VS Code, Copilot CLI, Copilot Studio, Claude, Foundry…)
       │
       ▼
-Cliente MCP  ──────►  Work IQ MCP Server  ──────►  Microsoft Graph
-                       (autentica como você)         (e-mails, calendário,
-                                                      docs, Teams, pessoas)
+MCP Client  ──────►  Work IQ MCP Server  ──────►  Microsoft Graph
+                      (authenticates as you)        (emails, calendar,
+                                                     docs, Teams, people)
 ```
 
-O Work IQ opera em modelo **Delegated Permissions**: ele assume a identidade do usuário conectado (token OAuth/JWT). Se você não tem permissão para ler a caixa do CEO no Outlook, a IA também não terá. Políticas de **Acesso Condicional** (MFA, conformidade de dispositivo) configuradas no Microsoft Entra ID são aplicadas de ponta a ponta.
+Work IQ operates under a **Delegated Permissions** model: it impersonates the connected user (OAuth/JWT token). If you do not have permission to read the CEO's mailbox in Outlook, the AI will not have it either. **Conditional Access** policies (MFA, device compliance) configured in Microsoft Entra ID are enforced end-to-end during token issuance.
 
 ---
 
-## Repositório oficial
+## Official repository
 
 | | `microsoft/work-iq` |
 | --- | --- |
-| **O que é** | CLI + MCP server + plugins prontos |
-| **Público-alvo** | Usuários e devs que consomem dados do M365 via IA |
-| **Linguagem** | TypeScript / Node.js (pacote NPM `@microsoft/workiq`) |
-| **Autenticação** | Automática via credenciais M365 |
-| **Tool MCP exposta** | `ask_work_iq` (linguagem natural) |
+| **What it is** | CLI + MCP server + ready-made plugins |
+| **Audience** | Users and devs consuming M365 data via AI |
+| **Language** | TypeScript / Node.js (NPM package `@microsoft/workiq`) |
+| **Authentication** | Automatic via M365 credentials |
+| **Exposed MCP tool** | `ask_work_iq` (natural language) |
 
-### Estrutura do repo oficial
+### Official repo layout
 
 ```
 microsoft/work-iq/
 ├── scripts/
-│   ├── Enable-WorkIQToolsForTenant.ps1   ← habilita MCPs + admin consent
-│   └── Verify-WorkIQSetup.ps1            ← diagnóstico somente leitura
+│   ├── Enable-WorkIQToolsForTenant.ps1   ← enables MCPs + admin consent
+│   └── Verify-WorkIQSetup.ps1            ← read-only diagnostics
 ├── plugins/
-│   ├── workiq/                           ← plugin principal
-│   │   ├── .mcp.json                     ← config do servidor MCP
-│   │   └── skills/workiq/SKILL.md        ← define quando/como usar ask_work_iq
-│   ├── workiq-productivity/              ← insights de produtividade
+│   ├── workiq/                           ← main plugin
+│   │   ├── .mcp.json                     ← MCP server config
+│   │   └── skills/workiq/SKILL.md        ← when/how to use ask_work_iq
+│   ├── workiq-productivity/              ← productivity insights
 │   │   ├── email-analytics
 │   │   ├── meeting-cost-analyzer
 │   │   ├── org-chart
 │   │   └── channel-audit
-│   └── microsoft-365-agents-toolkit/     ← scaffolding de agentes declarativos
-├── server.json                           ← definição do MCP server (npm package)
+│   └── microsoft-365-agents-toolkit/     ← declarative agent scaffolding
+├── server.json                           ← MCP server definition (npm package)
 ├── README.md
 ├── ADMIN-INSTRUCTIONS.md
 └── PLUGINS.md
@@ -72,83 +72,83 @@ microsoft/work-iq/
 
 ---
 
-## Modos de execução
+## Execution modes
 
-### `workiq ask` — humanos no terminal
+### `workiq ask` — humans in the terminal
 
 ```bash
 workiq ask
-# Chat interativo no terminal — você digita perguntas em linguagem natural.
-# Apenas leitura: não cria, altera ou exclui nada.
+# Interactive chat in the terminal — type questions in natural language.
+# Read-only: it does not create, update or delete anything.
 ```
 
-### `workiq mcp` — agentes de IA
+### `workiq mcp` — AI agents
 
-Quando você roda `workiq mcp`, o cursor "fica piscando" porque o processo virou um **servidor de fundo**. Ele não espera input humano: aguarda que um cliente MCP (VS Code, Claude, Copilot Studio, Azure AI Foundry) envie comandos JSON-RPC.
+When you run `workiq mcp`, the cursor "blinks" because the process turned into a **background server**. It is not waiting for human input: it is waiting for an MCP client (VS Code, Claude, Copilot Studio, Azure AI Foundry) to send JSON-RPC commands.
 
 ```
-Você (interface do agente)
-    ↓ "Quais reuniões tenho amanhã?"
-Cliente MCP (VS Code Copilot, Claude, Foundry…)
-    ↓ inicia: workiq mcp (em background)
-    ↓ envia JSON-RPC: tools/call → ask_work_iq
+You (agent UI)
+    ↓ "What meetings do I have tomorrow?"
+MCP Client (VS Code Copilot, Claude, Foundry…)
+    ↓ spawns: workiq mcp (in background)
+    ↓ sends JSON-RPC: tools/call → ask_work_iq
 Work IQ MCP Server
-    ↓ autentica com Microsoft Entra
-    ↓ consulta Microsoft Graph
-    ↓ retorna JSON
-Cliente MCP
-    ↓ formata a resposta
-Você ← resposta legível
+    ↓ authenticates with Microsoft Entra
+    ↓ queries Microsoft Graph
+    ↓ returns JSON
+MCP Client
+    ↓ formats the response
+You ← human-readable answer
 ```
 
-> 💡 `workiq mcp` **não é um comando para você digitar respostas**: é um endpoint para clientes MCP. Ele entra em arquivos como `.mcp.json`, `mcp-config.json` ou `settings.json` do VS Code.
+> 💡 `workiq mcp` is **not a command for you to type answers into**: it is an endpoint for MCP clients. It goes inside files like `.mcp.json`, `mcp-config.json` or VS Code's `settings.json`.
 
 ---
 
-## Segurança e governança
+## Security and governance
 
-- **Sem armazenamento:** nenhum dado do M365 é persistido — tudo é fetched sob demanda.
-- **Delegated Permissions:** o servidor herda exatamente as permissões do usuário autenticado.
-- **Admin visibility:** administradores controlam o uso via `admin.microsoft.com → Agentes e Ferramentas` (Permitir / Bloquear por política).
-- **Auditoria:** logs de chamadas MCP ficam disponíveis em **Microsoft Defender → Advanced Hunting**.
-- **Tokens JWT:** expiram em ~1 hora; nunca os armazene em código ou repositórios.
-
----
-
-## Pré-requisitos
-
-### Obrigatórios
-
-- **Licença Microsoft 365 Copilot add-on** — sem ela, toda chamada retorna `Access Denied`.
-- **Node.js ≥ 18** ([nodejs.org](https://nodejs.org/)) — o WorkIQ usa `npx` para rodar o servidor MCP.
-- **Programa Frontier habilitado** no tenant — os MCP Servers do Work IQ fazem parte do preview Frontier.
-- **Permissão de Administrador** no tenant para o admin consent inicial (Global Admin, Cloud Application Admin ou Application Admin).
-
-### Opcionais
-
-- **GitHub Copilot CLI** — para usar Work IQ como plugin no terminal.
-- **VS Code + GitHub Copilot Chat** — para usar Work IQ como MCP server no editor.
-- **Copilot Studio** — para criar agentes low-code.
-- **Azure AI Foundry** — para desenvolvimento pro-code de agentes.
-- **PowerShell 7+** — para os scripts de habilitação do tenant.
+- **No storage:** no M365 data is persisted — everything is fetched on demand.
+- **Delegated Permissions:** the server inherits exactly the permissions of the authenticated user.
+- **Admin visibility:** admins control usage via `admin.microsoft.com → Agents and Tools` (Allow / Block by policy).
+- **Audit:** MCP call logs are available in **Microsoft Defender → Advanced Hunting**.
+- **JWT tokens:** expire in ~1 hour; never store them in code or repositories.
 
 ---
 
-## Próximos passos
+## Prerequisites
 
-1. **Admin do tenant:** [../tenant-setup/](../tenant-setup/) — habilite Frontier e faça o admin consent.
-2. **Usuário/Dev:** [../cli/](../cli/) — instale o Work IQ CLI.
-3. **Editor:** [../vscode-mcp/](../vscode-mcp/) — configure o MCP no VS Code.
-4. **Casos de uso:** [./examples.md](./examples.md) — exemplos prontos de perguntas (read-only).
+### Required
+
+- **Microsoft 365 Copilot add-on license** — without it, every call returns `Access Denied`.
+- **Node.js ≥ 18** ([nodejs.org](https://nodejs.org/)) — Work IQ uses `npx` to run the MCP server.
+- **Frontier Program enabled** on the tenant — Work IQ MCP Servers are part of the Frontier preview.
+- **Admin permission** on the tenant for the initial admin consent (Global Admin, Cloud Application Admin or Application Admin).
+
+### Optional
+
+- **GitHub Copilot CLI** — to use Work IQ as a terminal plugin.
+- **VS Code + GitHub Copilot Chat** — to use Work IQ as an MCP server in the editor.
+- **Copilot Studio** — to build low-code agents.
+- **Azure AI Foundry** — for pro-code agent development.
+- **PowerShell 7+** — for the tenant enablement scripts.
 
 ---
 
-## Referências oficiais
+## Next steps
+
+1. **Tenant admin:** [../tenant-setup/](../tenant-setup/) — enable Frontier and run the admin consent.
+2. **User/Dev:** [../cli/](../cli/) — install the Work IQ CLI.
+3. **Editor:** [../vscode-mcp/](../vscode-mcp/) — configure MCP in VS Code.
+4. **Use cases:** [./examples.md](./examples.md) — ready-made (read-only) prompts.
+
+---
+
+## Official references
 
 - [Microsoft Work IQ CLI (preview)](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/workiq-overview)
 - [Work IQ MCP Overview — Microsoft Agent 365](https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview)
-- [Work IQ no Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/use-work-iq)
-- [microsoft/work-iq (repo oficial)](https://github.com/microsoft/work-iq)
-- [ADMIN-INSTRUCTIONS.md (oficial)](https://github.com/microsoft/work-iq/blob/main/ADMIN-INSTRUCTIONS.md)
+- [Work IQ in Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/use-work-iq)
+- [microsoft/work-iq (official repo)](https://github.com/microsoft/work-iq)
+- [ADMIN-INSTRUCTIONS.md (official)](https://github.com/microsoft/work-iq/blob/main/ADMIN-INSTRUCTIONS.md)
 - [User and Admin Consent Overview — Microsoft Entra](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/user-admin-consent-overview)
-- [Model Context Protocol — Spec oficial](https://modelcontextprotocol.io/)
+- [Model Context Protocol — Official spec](https://modelcontextprotocol.io/)

@@ -1,126 +1,126 @@
-# Exemplos de uso (read-only)
+# Usage examples (read-only)
 
-> Catálogo de prompts em linguagem natural para usar com `workiq ask` no terminal **ou** com a tool `ask_work_iq` em qualquer cliente MCP (VS Code Copilot Chat, Copilot Studio, Azure AI Foundry, Claude…).
+> Catalog of natural-language prompts for use with `workiq ask` in the terminal **or** with the `ask_work_iq` tool in any MCP client (VS Code Copilot Chat, Copilot Studio, Azure AI Foundry, Claude…).
 
-Todos os exemplos abaixo são **somente leitura**: consultam dados do Microsoft 365 via Microsoft Graph, sem alterar nenhum recurso.
+All examples below are **read-only**: they query Microsoft 365 data through Microsoft Graph without changing any resource.
 
 ---
 
-## 📅 Calendário e reuniões
+## 📅 Calendar and meetings
 
 ```bash
-workiq ask -q "Quais reuniões tenho hoje?"
-workiq ask -q "Quais reuniões tenho nas próximas 24 horas?"
-workiq ask -q "Tenho alguma reunião esta semana com a equipe de vendas?"
-workiq ask -q "Qual é o custo em horas das minhas reuniões recorrentes desta semana?"
-workiq ask -q "Quem organizou a reunião de ontem às 14h?"
+workiq ask -q "What meetings do I have today?"
+workiq ask -q "What meetings do I have in the next 24 hours?"
+workiq ask -q "Do I have any meeting this week with the sales team?"
+workiq ask -q "What is the cost in hours of my recurring meetings this week?"
+workiq ask -q "Who organized yesterday's 2pm meeting?"
 ```
 
-## 📧 E-mails
+## 📧 Emails
 
 ```bash
-workiq ask -q "Resuma os e-mails não lidos de hoje por prioridade"
-workiq ask -q "Existe algum e-mail do projeto X aguardando minha resposta?"
-workiq ask -q "Quais e-mails na minha caixa são irrelevantes e poderiam ser arquivados?"
-workiq ask -q "Existem e-mails urgentes da Sarah sobre o orçamento?"
+workiq ask -q "Summarize today's unread emails by priority"
+workiq ask -q "Is there any email from project X waiting for my reply?"
+workiq ask -q "Which emails in my inbox are irrelevant and could be archived?"
+workiq ask -q "Are there urgent emails from Sarah about the budget?"
 ```
 
-## 📄 Documentos (SharePoint / OneDrive)
+## 📄 Documents (SharePoint / OneDrive)
 
 ```bash
-workiq ask -q "Encontre documentos que trabalhei nos últimos 3 dias"
-workiq ask -q "Qual é o conteúdo da especificação do projeto Y no SharePoint?"
-workiq ask -q "Quais arquivos do SharePoint estão relacionados ao cliente Contoso?"
-workiq ask -q "Me liste os sites aos quais meu usuário tem acesso"
+workiq ask -q "Find documents I worked on in the last 3 days"
+workiq ask -q "What is the content of project Y's spec on SharePoint?"
+workiq ask -q "Which SharePoint files are related to customer Contoso?"
+workiq ask -q "List the sites my user has access to"
 ```
 
-![CLI executando workiq ask sobre sites do SharePoint acessíveis ao usuário](../images/cli-ask-list-sharepoint-sites.png)
+![CLI running workiq ask about SharePoint sites accessible to the user](../images/cli-ask-list-sharepoint-sites.png)
 
-> 💡 Repare na resposta acima: o Work IQ **não é o Microsoft Graph**. Ele lista sites baseado em **evidência objetiva de acesso** (arquivos/páginas que você criou, editou ou visualizou) — não na lista exaustiva de permissões do tenant. Esse é um comportamento por design da camada de inteligência.
+> 💡 Notice the response above: Work IQ **is not Microsoft Graph**. It lists sites based on **objective evidence of access** (files/pages you created, edited or viewed) — not on the exhaustive list of tenant permissions. This is by design of the intelligence layer.
 
-## 👥 Pessoas e organização
+## 👥 People and organization
 
 ```bash
-workiq ask -q "Quem é meu gestor?"
-workiq ask -q "Quais são meus subordinados diretos?"
-workiq ask -q "Quem está trabalhando no Projeto Alpha?"
-workiq ask -q "Qual é o cargo de Maria Silva?"
-workiq ask -q "Como entro em contato com o time de infraestrutura?"
+workiq ask -q "Who is my manager?"
+workiq ask -q "Who are my direct reports?"
+workiq ask -q "Who is working on Project Alpha?"
+workiq ask -q "What is Maria Silva's job title?"
+workiq ask -q "How do I reach the infrastructure team?"
 ```
 
 ## 💬 Teams
 
 ```bash
-workiq ask -q "Resuma as mensagens de hoje no canal de Engenharia"
-workiq ask -q "Houve alguma decisão importante no chat do squad ontem?"
+workiq ask -q "Summarize today's messages in the Engineering channel"
+workiq ask -q "Were there any important decisions in the squad chat yesterday?"
 ```
 
 ---
 
-## Cenários compostos
+## Composite scenarios
 
-### 1. Radar de Semana (briefing executivo)
+### 1. Week Radar (executive briefing)
 
-> Toda segunda-feira, gere um briefing completo da semana.
-
-```bash
-workiq ask -q "Crie um briefing executivo da minha semana: liste reuniões agendadas, e-mails prioritários não lidos, documentos modificados nos últimos 3 dias e calcule o custo total em horas de todas as reuniões desta semana"
-```
-
-### 2. Onboarding inteligente de novo colaborador
-
-> Guia de onboarding personalizado, gerado a partir dos dados reais do tenant.
+> Every Monday, generate a complete briefing of the week.
 
 ```bash
-workiq ask -q "Sou novo no time de [ÁREA]. Com base nos e-mails, documentos e canais do Teams, me diga: quais são as pessoas-chave que devo conhecer, quais projetos estão ativos, quais documentos devo ler primeiro e quais foram as decisões importantes dos últimos 30 dias"
+workiq ask -q "Build an executive briefing for my week: list scheduled meetings, top unread emails, documents modified in the last 3 days, and compute the total cost in hours of all meetings this week"
 ```
 
-### 3. Auditor de reuniões desnecessárias
+### 2. Smart onboarding for a new teammate
 
-> Identifica reuniões recorrentes que poderiam virar updates assíncronos.
+> Personalized onboarding guide generated from real tenant data.
 
 ```bash
-workiq ask -q "Analise minhas reuniões recorrentes dos últimos 30 dias. Para cada uma: liste participantes, duração média, frequência e se houve registro de decisões ou ações. Calcule o custo total em horas por pessoa e identifique quais poderiam ser substituídas por updates assíncronos"
+workiq ask -q "I am new on the [TEAM] team. Based on emails, documents and Teams channels, tell me: who are the key people I should know, which projects are active, which documents I should read first, and what important decisions were made in the last 30 days"
 ```
 
-### 4. Co-autor de Pull Request description (no VS Code)
+### 3. Auditor of unnecessary meetings
 
-> Com o MCP ativo no Copilot Chat, peça contexto antes de abrir o PR.
+> Identify recurring meetings that could become async updates.
 
-```
-Busque no Work IQ todos os e-mails, reuniões e documentos relacionados à
-feature [NOME]. Com esse contexto, gere uma descrição de PR completa
-incluindo: contexto de negócio, decisões técnicas tomadas, quem deve
-revisar e o link para a spec no SharePoint.
+```bash
+workiq ask -q "Analyze my recurring meetings of the last 30 days. For each one: list participants, average duration, frequency, and whether decisions or actions were recorded. Compute the total cost in hours per person and identify which ones could be replaced by async updates"
 ```
 
-### 5. Contexto de cliente para suporte
+### 4. Pull request description co-author (in VS Code)
+
+> With MCP active in Copilot Chat, request context before opening the PR.
 
 ```
-Quais foram os últimos e-mails, reuniões e tickets relacionados ao
-cliente Contoso? Resuma o status atual do relacionamento.
+Search Work IQ for all emails, meetings and documents related to the
+[NAME] feature. Using that context, generate a complete PR description
+including: business context, technical decisions taken, who should
+review, and the link to the spec on SharePoint.
+```
+
+### 5. Customer context for support
+
+```
+What were the latest emails, meetings and tickets related to customer
+Contoso? Summarize the current relationship status.
 ```
 
 ---
 
-## Opções da CLI (`workiq ask`)
+## CLI options (`workiq ask`)
 
-| Curta | Longa | Parâmetro | Descrição |
+| Short | Long | Argument | Description |
 | --- | --- | --- | --- |
-| `-q` | `--question` | `<question>` | Pergunta em linguagem natural. |
-| `-f` | `--file-urls` | `<file-urls>` | URLs de arquivos do OneDrive/SharePoint para forçar como contexto raiz. |
-| `-t` | `--tenant` | `<tenant-id>` | Tenant específico (quando você participa de mais de um). |
-| `-v` | `--verbose` | — | Habilita logs detalhados (`request-id`, `conversation ID`). |
-| `-d` | `--developer` | — | Modo desenvolvedor (payloads JSON brutos). |
-| `-?, -h` | `--help` | — | Menu de ajuda. |
+| `-q` | `--question` | `<question>` | Natural-language question. |
+| `-f` | `--file-urls` | `<file-urls>` | URLs of OneDrive/SharePoint files to force as root context. |
+| `-t` | `--tenant` | `<tenant-id>` | Specific tenant (when you belong to more than one). |
+| `-v` | `--verbose` | — | Verbose logs (`request-id`, `conversation ID`). |
+| `-d` | `--developer` | — | Developer mode (raw JSON payloads). |
+| `-?, -h` | `--help` | — | Help menu. |
 
 ---
 
 ## Troubleshooting
 
-| Erro | Causa | Solução |
+| Error | Cause | Solution |
 | --- | --- | --- |
-| `AADSTS650052` | Service Principal não provisionado | Execute [`Enable-WorkIQToolsForTenant.ps1`](../tenant-setup/Enable-WorkIQToolsForTenant.ps1) |
-| `Access Denied` | Sem licença Copilot ou sem consent | Verifique licença em `admin.microsoft.com` e refaça o admin consent |
-| MCP não aparece no Copilot Studio | Frontier não habilitado | Ative via Admin Center → Serviços → Microsoft 365 Insider |
-| Cursor "piscando" após `workiq mcp` | Comportamento esperado — servidor aguardando cliente | Não é erro; configure no arquivo do agente (ver [../vscode-mcp/](../vscode-mcp/)) |
+| `AADSTS650052` | Service Principal not provisioned | Run [`Enable-WorkIQToolsForTenant.ps1`](../tenant-setup/Enable-WorkIQToolsForTenant.ps1) |
+| `Access Denied` | No Copilot license or no consent | Check the license at `admin.microsoft.com` and re-run admin consent |
+| MCP not showing in Copilot Studio | Frontier not enabled | Enable via Admin Center → Services → Microsoft 365 Insider |
+| Cursor "blinking" after `workiq mcp` | Expected — server waiting for a client | Not an error; configure it in the agent file (see [../vscode-mcp/](../vscode-mcp/)) |

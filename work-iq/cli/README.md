@@ -1,20 +1,20 @@
-# Work IQ CLI — instalação e uso (read-only)
+# Work IQ CLI — installation and usage (read-only)
 
-Instale o `@microsoft/workiq` para consultar seus dados do Microsoft 365 via linguagem natural diretamente no terminal.
+Install `@microsoft/workiq` to query your Microsoft 365 data using natural language directly from the terminal.
 
-> 🔒 Tudo aqui é **read-only** — `workiq ask` apenas consulta; nada é criado, alterado ou excluído.
+> 🔒 Everything here is **read-only** — `workiq ask` only queries; nothing is created, updated or deleted.
 
 ---
 
-## Pré-requisitos
+## Prerequisites
 
 - **Node.js ≥ 18** ([nodejs.org](https://nodejs.org/))
-- Tenant já configurado pelo admin → ver [`../tenant-setup/`](../tenant-setup/)
-- Licença **Microsoft 365 Copilot add-on** ativa para o usuário
+- Tenant already configured by the admin → see [`../tenant-setup/`](../tenant-setup/)
+- Active **Microsoft 365 Copilot add-on** license for the user
 
 ---
 
-## Opção 1 — Script automatizado (recomendado)
+## Option 1 — Automated script (recommended)
 
 ### macOS / Linux
 
@@ -28,105 +28,105 @@ Instale o `@microsoft/workiq` para consultar seus dados do Microsoft 365 via lin
 .\cli\setup-workiq-cli.ps1
 ```
 
-O script:
-1. Verifica se o Node.js está instalado.
-2. Instala `@microsoft/workiq` globalmente via NPM.
-3. Roda `workiq accept-eula` (obrigatório na primeira execução).
-4. Mostra o snippet MCP a ser colocado em `.vscode/mcp.json` (ver [`../vscode-mcp/`](../vscode-mcp/)).
-5. Detecta o GitHub Copilot CLI e mostra o comando de plugin.
+The script:
+1. Verifies that Node.js is installed.
+2. Installs `@microsoft/workiq` globally via NPM.
+3. Runs `workiq accept-eula` (required on first run).
+4. Shows the MCP snippet to be placed in `.vscode/mcp.json` (see [`../vscode-mcp/`](../vscode-mcp/)).
+5. Detects GitHub Copilot CLI and prints the plugin command.
 
 ---
 
-## Opção 2 — NPM global manual
+## Option 2 — Manual NPM global
 
 ```bash
 npm install -g @microsoft/workiq
 workiq accept-eula
-workiq ask -q "Quais reuniões tenho hoje?"
+workiq ask -q "What meetings do I have today?"
 ```
 
-Após o `accept-eula`, você vê uma confirmação no terminal:
+After `accept-eula`, you see a confirmation in the terminal:
 
-![Terminal mostrando workiq accept-eula → EULA has been accepted](../images/cli-accept-eula.png)
+![Terminal showing workiq accept-eula → EULA has been accepted](../images/cli-accept-eula.png)
 
 ---
 
-## Opção 3 — NPX sem instalar
+## Option 3 — NPX with no install
 
 ```bash
-npx -y @microsoft/workiq@latest ask -q "Resuma meus e-mails não lidos"
+npx -y @microsoft/workiq@latest ask -q "Summarize my unread emails"
 ```
 
-> Diferente do `npm` (que instala pacotes), o `npx` (Node Package Execute) baixa o pacote para um cache temporário, executa e descarta. Bom para experimentar sem poluir o sistema.
+> Unlike `npm` (which installs packages), `npx` (Node Package Execute) downloads the package into a temporary cache, runs it and discards it. Great for trying things out without polluting the system.
 
 ---
 
-## Opção 4 — GitHub Copilot CLI (como plugin)
+## Option 4 — GitHub Copilot CLI (as a plugin)
 
-Use o Work IQ como plugin do **GitHub Copilot CLI**:
+Use Work IQ as a plugin of the **GitHub Copilot CLI**:
 
 ```bash
-copilot                                    # abre o Copilot CLI
-/plugin marketplace add microsoft/work-iq  # uma vez
+copilot                                    # opens the Copilot CLI
+/plugin marketplace add microsoft/work-iq  # one-time
 /plugin install workiq@work-iq
 /plugin install workiq-productivity@work-iq
 workiq accept-eula
 ```
 
-Depois disso, basta fazer perguntas em linguagem natural dentro do Copilot CLI:
+After that, just ask in natural language inside Copilot CLI:
 
 ```
-Você: Quais são minhas reuniões de hoje?
-Você: Resuma os e-mails não lidos da última hora
-Você: Quem é meu gestor?
+You: What are my meetings today?
+You: Summarize unread emails from the last hour
+You: Who is my manager?
 ```
 
 ---
 
-## Comandos disponíveis
+## Available commands
 
-| Comando | Descrição |
+| Command | Description |
 | --- | --- |
-| `workiq accept-eula` | Aceita a EULA — obrigatório na primeira execução. |
-| `workiq ask` | Modo interativo — chat no terminal. |
-| `workiq ask -q "pergunta"` | Pergunta direta sem entrar em modo interativo. |
-| `workiq ask -t "tenant-id" -q "..."` | Especifica o tenant manualmente. |
-| `workiq mcp` | Inicia o servidor MCP (para clientes — não para humanos). |
-| `workiq version` | Versão instalada. |
+| `workiq accept-eula` | Accepts the EULA — required on first run. |
+| `workiq ask` | Interactive mode — chat in the terminal. |
+| `workiq ask -q "question"` | Direct question without entering interactive mode. |
+| `workiq ask -t "tenant-id" -q "..."` | Specifies the tenant manually. |
+| `workiq mcp` | Starts the MCP server (for clients — not for humans). |
+| `workiq version` | Installed version. |
 
-📖 Ver tabela completa de opções e mais exemplos em [`../docs/examples.md`](../docs/examples.md).
+📖 Full options table and more examples in [`../docs/examples.md`](../docs/examples.md).
 
 ---
 
-## Exemplos rápidos
+## Quick examples
 
 ```bash
-workiq ask -q "Quais reuniões tenho hoje?"
-workiq ask -q "Resuma os e-mails não lidos por prioridade"
-workiq ask -q "Encontre documentos que trabalhei nos últimos 3 dias"
-workiq ask -q "Quem é meu gestor?"
-workiq ask -q "Resuma as mensagens de hoje no canal de Engenharia"
+workiq ask -q "What meetings do I have today?"
+workiq ask -q "Summarize unread emails by priority"
+workiq ask -q "Find documents I worked on in the last 3 days"
+workiq ask -q "Who is my manager?"
+workiq ask -q "Summarize today's messages in the Engineering channel"
 ```
 
-Exemplo real — perguntando quais e-mails são irrelevantes:
+Real example — asking which emails are irrelevant:
 
-![CLI executando workiq ask sobre e-mails irrelevantes — início da resposta](../images/cli-ask-emails-irrelevant.png)
+![CLI running workiq ask about irrelevant emails — start of the response](../images/cli-ask-emails-irrelevant.png)
 
-![Continuação da resposta: classificação de e-mails que não devem ser excluídos e resumo rápido](../images/cli-ask-emails-irrelevant-output.png)
+![Continuation of the response: classification of emails that should not be deleted and quick summary](../images/cli-ask-emails-irrelevant-output.png)
 
-Catálogo completo: [`../docs/examples.md`](../docs/examples.md).
+Full catalog: [`../docs/examples.md`](../docs/examples.md).
 
 ---
 
-## Arquivos deste diretório
+## Files in this directory
 
-| Arquivo | Plataforma |
+| File | Platform |
 | --- | --- |
 | [setup-workiq-cli.sh](./setup-workiq-cli.sh) | macOS / Linux (bash) |
 | [setup-workiq-cli.ps1](./setup-workiq-cli.ps1) | Windows (PowerShell 7+) |
 
 ---
 
-## Próximo passo
+## Next step
 
-Quer usar o Work IQ direto no editor? Veja [`../vscode-mcp/`](../vscode-mcp/).
+Want to use Work IQ directly in the editor? See [`../vscode-mcp/`](../vscode-mcp/).
