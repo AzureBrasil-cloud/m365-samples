@@ -16,9 +16,9 @@ Configure VS Code's **GitHub Copilot Chat** (or any other MCP client) to consume
 
 - Up-to-date **VS Code** with the **GitHub Copilot** and **GitHub Copilot Chat** extensions.
 - **Node.js ≥ 18** installed (for `npx`).
-- Tenant configured by the admin → [`../tenant-setup/`](../tenant-setup/).
+- Tenant configured by the admin → [`../../tenant-setup/`](../../tenant-setup/).
 - Active **Microsoft 365 Copilot add-on** license.
-- (Optional) `workiq accept-eula` run once, see [`../cli/`](../cli/).
+- (Optional) `workiq accept-eula` run once, see [`../../cli/`](../../cli/).
 
 > You **do not need** to install `@microsoft/workiq` globally. The snippet below uses `npx`, which fetches the package on demand.
 
@@ -33,7 +33,7 @@ Configure VS Code's **GitHub Copilot Chat** (or any other MCP client) to consume
 
 ---
 
-## Step 1, register the MCP server
+## Step 1: register the MCP server
 
 The file [`mcp-config.json`](./mcp-config.json) is the **single, portable** snippet that works in VS Code as well as in any other MCP client (Claude Desktop, Azure AI Foundry, Copilot Studio in advanced config, custom agents):
 
@@ -67,7 +67,7 @@ Create `.vscode/mcp.json` at the root of your project and paste the contents of 
 
 ---
 
-## Step 2, install the custom GitHub Copilot agent
+## Step 2: custom GitHub Copilot agent (Optional)
 
 GitHub Copilot in VS Code supports **custom agents** declared as `*.agent.md` files. They are personas with their own instructions, tool restrictions and (optionally) model preference. Storing them in `.github/agents/` makes them shareable through your repository.
 
@@ -119,7 +119,7 @@ Key choices:
 
 ---
 
-## Step 3, use it
+## Step 3: use it
 
 Once the agent is active, just ask in natural language. The assistant will call `workiq/*` under the hood and ground every answer in your tenant data.
 
@@ -129,11 +129,9 @@ Once the agent is active, just ask in natural language. The assistant will call 
 List all messages from Carlos Erutan in Microsoft Teams (Work IQ).
 ```
 
-![Personal Assistant agent in Copilot Chat answering "List all messages from Carlos Erutan" using the Work IQ MCP](../images/vscode-personal-assistant-messages-from-user.png)
+![Personal Assistant agent in Copilot Chat answering "List all messages from Carlos Erutan" using the Work IQ MCP](../../images/agent-work-iq-vscode.png)
 
-> 📷 Drop your screenshot at `work-iq/images/vscode-personal-assistant-messages-from-user.png` to render the image above.
-
-More prompt ideas: [`../docs/examples.md`](../docs/examples.md).
+More prompt ideas: [`../../docs/examples.md`](../../docs/examples.md).
 
 ---
 
@@ -144,7 +142,7 @@ More prompt ideas: [`../docs/examples.md`](../docs/examples.md).
 | Reuse the agent inside another agent | Add `Personal Assistant` to the parent agent's `agents:` list and reference it by description from the body. |
 | Trigger it as a slash command | Wrap a recurring prompt in `.github/prompts/<name>.prompt.md` and have the prompt call the agent. |
 | Constrain it further (e.g. only calendar tools) | Replace `workiq/*` with the explicit Work IQ tool names you want exposed. |
-| Use it from the CLI | The same MCP snippet works with **GitHub Copilot CLI** and the **Work IQ CLI**, see [`../cli/`](../cli/). |
+| Use it from the CLI | The same MCP snippet works with **GitHub Copilot CLI** and the **Work IQ CLI**, see [`../../cli/`](../../cli/). |
 
 ---
 
@@ -168,7 +166,7 @@ The same [`mcp-config.json`](./mcp-config.json) works in any client that reads t
 | --- | --- | --- |
 | `workiq` does not show under Tools | `mcp.json` not saved / VS Code not restarted | Save the file and restart VS Code. |
 | `Personal Assistant` does not show in the agent picker | File is not under `.github/agents/`, or YAML frontmatter is broken (unquoted colons, tabs) | Move the file, validate the frontmatter, reload the window. |
-| `Access Denied` on the first call | No Copilot license or consent not granted | See [`../tenant-setup/`](../tenant-setup/). |
+| `Access Denied` on the first call | No Copilot license or consent not granted | See [`../../tenant-setup/`](../../tenant-setup/). |
 | `command not found: npx` | Node.js not installed | Install Node.js ≥ 18. |
 | Agent answers from "general knowledge" instead of `workiq` | Tool was not toggled on, or the agent's `tools:` list does not include `workiq/*` | Check the tool badge in the chat header and the agent frontmatter. |
 | Empty answers or "I don't have access" | The signed-in user really lacks Graph permission for the resource | Expected, Work IQ inherits delegated permissions. |

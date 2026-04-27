@@ -1,0 +1,2 @@
+- Do not use `-`
+- Always create text in EN-US for this repo

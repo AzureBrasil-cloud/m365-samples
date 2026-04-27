@@ -36,9 +36,16 @@ work-iq/
 ├── cli/                                ← Work IQ CLI (terminal)
 │   └── README.md                       ← installation + CLI usage
 │
-└── vscode-mcp/                         ← Work IQ MCP in VS Code (and other MCP clients)
-    ├── README.md                       ← config + usage in Copilot Chat
-    └── mcp-config.json                 ← single MCP snippet (VS Code + others)
+└── github-copilot/                     ← Work IQ via GitHub Copilot (VS Code + CLI)
+    ├── github-copilot-vscode/          ← Work IQ MCP in VS Code + GitHub Copilot Chat
+    │   ├── README.md                   ← config + custom agent + usage
+    │   ├── mcp-config.json             ← single MCP snippet (VS Code + others)
+    │   └── personal-assistant.agent.md ← example GitHub Copilot custom agent
+    │
+    └── github-copilot-cli/            ← Work IQ MCP in GitHub Copilot CLI
+        ├── README.md                   ← install + config + custom agent + usage
+        ├── mcp-config.json             ← MCP snippet for ~/.copilot/mcp-config.json
+        └── work-iq-assistant.agent.md  ← example GitHub Copilot CLI custom agent
 
 images/                                 ← screenshots used across the docs
 ```
@@ -52,7 +59,8 @@ images/                                 ← screenshots used across the docs
 | I want to understand the product | [docs/overview.md](./docs/overview.md) |
 | M365 admin preparing the tenant | [tenant-setup/](./tenant-setup/) |
 | Dev/User installing locally | [cli/](./cli/) |
-| I want to use it in the editor | [vscode-mcp/](./vscode-mcp/) |
+| I want to use it in the editor | [github-copilot/github-copilot-vscode/](./github-copilot/github-copilot-vscode/) |
+| I want to use it in the terminal (GitHub Copilot CLI) | [github-copilot/github-copilot-cli/](./github-copilot/github-copilot-cli/) |
 | Looking for prompt examples | [docs/examples.md](./docs/examples.md) |
 
 ---
@@ -71,10 +79,17 @@ images/                                 ← screenshots used across the docs
    └─ workiq ask -q "What meetings do I have today?"
                 │
                 ▼
-3. Editor (optional)                    vscode-mcp/
+3. Editor (optional)                    github-copilot/github-copilot-vscode/
    └─ Creates .vscode/mcp.json (or User MCP config) with the snippet
    └─ Toggles "workiq" under Tools in Copilot Chat
    └─ Asks in natural language inside VS Code
+                │
+                ▼
+4. Terminal (optional)                  github-copilot/github-copilot-cli/
+   └─ Installs GitHub Copilot CLI (brew / npm / winget)
+   └─ Adds workiq MCP via /mcp add or mcp-config.json
+   └─ (Optional) copies work-iq-assistant.agent.md to ~/.copilot/agents/
+   └─ Asks in natural language from the shell
 ```
 
 ---
